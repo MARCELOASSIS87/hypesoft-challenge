@@ -1,0 +1,56 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "ShopSense.Infrastructure/1.0.0": {
+        "dependencies": {
+          "ShopSense.Application": "1.0.0",
+          "ShopSense.Domain": "1.0.0"
+        },
+        "runtime": {
+          "ShopSense.Infrastructure.dll": {}
+        }
+      },
+      "ShopSense.Application/1.0.0": {
+        "dependencies": {
+          "ShopSense.Domain": "1.0.0"
+        },
+        "runtime": {
+          "ShopSense.Application.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ShopSense.Domain/1.0.0": {
+        "runtime": {
+          "ShopSense.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ShopSense.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ShopSense.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ShopSense.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

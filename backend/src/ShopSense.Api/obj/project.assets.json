@@ -1,0 +1,209 @@
+{
+  "version": 3,
+  "targets": {
+    "net9.0": {
+      "Microsoft.AspNetCore.OpenApi/9.0.4": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.OpenApi": "1.6.17"
+        },
+        "compile": {
+          "lib/net9.0/Microsoft.AspNetCore.OpenApi.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.AspNetCore.OpenApi.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
+      "Microsoft.OpenApi/1.6.17": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Microsoft.OpenApi.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.OpenApi.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "ShopSense.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "ShopSense.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/ShopSense.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ShopSense.Application.dll": {}
+        }
+      },
+      "ShopSense.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/ShopSense.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ShopSense.Domain.dll": {}
+        }
+      },
+      "ShopSense.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "ShopSense.Application": "1.0.0",
+          "ShopSense.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/ShopSense.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ShopSense.Infrastructure.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Microsoft.AspNetCore.OpenApi/9.0.4": {
+      "sha512": "GfZWPbZz1aAtEO3wGCkpeyRc0gzr/+VRHnUgY/YjqVPDlHbeKWCXw3IxKarQdo9myC2O1QBf652Mo50QqbXYRg==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.openapi/9.0.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "PACKAGE.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net9.0/Microsoft.AspNetCore.OpenApi.dll",
+        "lib/net9.0/Microsoft.AspNetCore.OpenApi.xml",
+        "microsoft.aspnetcore.openapi.9.0.4.nupkg.sha512",
+        "microsoft.aspnetcore.openapi.nuspec"
+      ]
+    },
+    "Microsoft.OpenApi/1.6.17": {
+      "sha512": "Le+kehlmrlQfuDFUt1zZ2dVwrhFQtKREdKBo+rexOwaCoYP0/qpgT9tLxCsZjsgR5Itk1UKPcbgO+FyaNid/bA==",
+      "type": "package",
+      "path": "microsoft.openapi/1.6.17",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/netstandard2.0/Microsoft.OpenApi.dll",
+        "lib/netstandard2.0/Microsoft.OpenApi.pdb",
+        "lib/netstandard2.0/Microsoft.OpenApi.xml",
+        "microsoft.openapi.1.6.17.nupkg.sha512",
+        "microsoft.openapi.nuspec"
+      ]
+    },
+    "ShopSense.Application/1.0.0": {
+      "type": "project",
+      "path": "../ShopSense.Application/ShopSense.Application.csproj",
+      "msbuildProject": "../ShopSense.Application/ShopSense.Application.csproj"
+    },
+    "ShopSense.Domain/1.0.0": {
+      "type": "project",
+      "path": "../ShopSense.Domain/ShopSense.Domain.csproj",
+      "msbuildProject": "../ShopSense.Domain/ShopSense.Domain.csproj"
+    },
+    "ShopSense.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../ShopSense.Infrastructure/ShopSense.Infrastructure.csproj",
+      "msbuildProject": "../ShopSense.Infrastructure/ShopSense.Infrastructure.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net9.0": [
+      "Microsoft.AspNetCore.OpenApi >= 9.0.4",
+      "ShopSense.Application >= 1.0.0",
+      "ShopSense.Infrastructure >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "/home/marcelo/.nuget/packages/": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Api/ShopSense.Api.csproj",
+      "projectName": "ShopSense.Api",
+      "projectPath": "/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Api/ShopSense.Api.csproj",
+      "packagesPath": "/home/marcelo/.nuget/packages/",
+      "outputPath": "/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Api/obj/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/home/marcelo/.nuget/NuGet/NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net9.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "projectReferences": {
+            "/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Application/ShopSense.Application.csproj": {
+              "projectPath": "/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Application/ShopSense.Application.csproj"
+            },
+            "/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Infrastructure/ShopSense.Infrastructure.csproj": {
+              "projectPath": "/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Infrastructure/ShopSense.Infrastructure.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.200"
+    },
+    "frameworks": {
+      "net9.0": {
+        "targetAlias": "net9.0",
+        "dependencies": {
+          "Microsoft.AspNetCore.OpenApi": {
+            "target": "Package",
+            "version": "[9.0.4, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.AspNetCore.App": {
+            "privateAssets": "none"
+          },
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.203/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

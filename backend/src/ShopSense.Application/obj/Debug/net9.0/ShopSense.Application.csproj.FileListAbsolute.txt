@@ -1,0 +1,16 @@
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Application/bin/Debug/net9.0/ShopSense.Application.deps.json
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Application/bin/Debug/net9.0/ShopSense.Application.dll
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Application/bin/Debug/net9.0/ShopSense.Application.pdb
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Application/bin/Debug/net9.0/ShopSense.Domain.dll
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Application/bin/Debug/net9.0/ShopSense.Domain.pdb
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Application/obj/Debug/net9.0/ShopSense.Application.csproj.AssemblyReference.cache
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Application/obj/Debug/net9.0/ShopSense.Application.GeneratedMSBuildEditorConfig.editorconfig
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Application/obj/Debug/net9.0/ShopSense.Application.AssemblyInfoInputs.cache
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Application/obj/Debug/net9.0/ShopSense.Application.AssemblyInfo.cs
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Application/obj/Debug/net9.0/ShopSense.Application.csproj.CoreCompileInputs.cache
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Application/obj/Debug/net9.0/ShopSense.Application.sourcelink.json
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Application/obj/Debug/net9.0/ShopSens.1DD05013.Up2Date
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Application/obj/Debug/net9.0/ShopSense.Application.dll
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Application/obj/Debug/net9.0/refint/ShopSense.Application.dll
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Application/obj/Debug/net9.0/ShopSense.Application.pdb
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Application/obj/Debug/net9.0/ref/ShopSense.Application.dll
