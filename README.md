@@ -339,3 +339,7 @@ chore(deps): update dependencies to latest versions
 ---
 
 *Este desafio foi criado para identificar desenvolvedores excepcionais que compartilham nossa paixão por tecnologia e excelência técnica. Estamos ansiosos para ver sua solução!*
+
+## Contribuição
+
+Para detalhes sobre fluxo de trabalho, commits e ADRs, consulte [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md).
