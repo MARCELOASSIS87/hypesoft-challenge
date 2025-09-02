@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ShopSense.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2dd2d644a62e61efa5b905669a1480173f62ebdd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+96ba52d975ce758567bfbce135293dfcff4de8bb")]
 [assembly: System.Reflection.AssemblyProductAttribute("ShopSense.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ShopSense.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
