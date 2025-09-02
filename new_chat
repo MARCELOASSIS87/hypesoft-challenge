@@ -1,0 +1,14 @@
+[Contexto continuação desafio Hypesoft]
+
+- Projeto ShopSense já iniciado (.NET 9, Clean Architecture)
+- Docker Compose rodando com MongoDB, Keycloak e Mongo Express
+- Banco Mongo modelado:
+  - categories (validação + índices)
+  - products (validação + índices, referência para categoryId)
+  - inventory_movements (validação + índices, referência para productId)
+- Seed inicial criado: 1 categoria (Bebidas), 1 produto (Cachaça Premium), 1 movimento de estoque
+- Documentação:
+  - ADR 0001 — Decisões Arquiteturais Iniciais
+  - ADR 0002 — Persistência em MongoDB
+- Commits versionados com Conventional Commits
+- Próximo passo: implementar entidades `Category` e `Product` no `ShopSense.Domain`
