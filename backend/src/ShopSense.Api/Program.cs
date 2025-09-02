@@ -46,6 +46,9 @@ if (app.Environment.IsDevelopment())
 app.MapCategories();
 // Endpoints de products
 app.MapProducts();
+// Endpoints de inventory
+app.MapInventory();
+
 
 // ===== Healthcheck simples (Mongo) =====
 app.MapGet("/health", async (IMongoDatabase db) =>
