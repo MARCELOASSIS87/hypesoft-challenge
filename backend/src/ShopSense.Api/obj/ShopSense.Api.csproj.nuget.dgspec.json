@@ -54,6 +54,14 @@
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.4, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[3.4.3, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[9.0.4, )"
             }
           },
           "imports": [

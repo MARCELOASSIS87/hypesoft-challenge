@@ -38,3 +38,12 @@
 /home/marcelo/projetos/desafio-1/backend/src/ShopSense.Api/obj/Debug/net9.0/ShopSense.Api.pdb
 /home/marcelo/projetos/desafio-1/backend/src/ShopSense.Api/obj/Debug/net9.0/ShopSense.Api.genruntimeconfig.cache
 /home/marcelo/projetos/desafio-1/backend/src/ShopSense.Api/obj/Debug/net9.0/ref/ShopSense.Api.dll
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Api/bin/Debug/net9.0/DnsClient.dll
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Api/bin/Debug/net9.0/MongoDB.Bson.dll
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Api/bin/Debug/net9.0/MongoDB.Driver.dll
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Api/bin/Debug/net9.0/SharpCompress.dll
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Api/bin/Debug/net9.0/Snappier.dll
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Api/bin/Debug/net9.0/Swashbuckle.AspNetCore.Swagger.dll
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Api/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Api/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+/home/marcelo/projetos/desafio-1/backend/src/ShopSense.Api/bin/Debug/net9.0/ZstdSharp.dll

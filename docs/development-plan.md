@@ -8,7 +8,7 @@ Adotado fluxo Scrum/Kanban simplificado, com entregas diárias incrementais.
 ### Dia 1 – Backend: Domínio + API básica
 - Criar entidades `Category` e `Product` em `ShopSense.Domain` - Ok
 - Interfaces de repositórios (`ICategoryRepository`, `IProductRepository`) -Ok
-- Implementar repositórios em `Infrastructure` (MongoDB Driver)
+- Implementar repositórios em `Infrastructure` (MongoDB Driver) - Ok
 - Expor CRUD básico via `ShopSense.Api` (endpoints + Swagger)
 - Commit + ADR sobre modelagem do domínio
 
