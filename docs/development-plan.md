@@ -9,8 +9,8 @@ Adotado fluxo Scrum/Kanban simplificado, com entregas diárias incrementais.
 - Criar entidades `Category` e `Product` em `ShopSense.Domain` - Ok
 - Interfaces de repositórios (`ICategoryRepository`, `IProductRepository`) -Ok
 - Implementar repositórios em `Infrastructure` (MongoDB Driver) - Ok
-- Expor CRUD básico via `ShopSense.Api` (endpoints + Swagger)
-- Commit + ADR sobre modelagem do domínio
+- Expor CRUD básico via `ShopSense.Api` (endpoints + Swagger) - OK
+- Commit + ADR sobre modelagem do domínio - Ok
 
 ### Dia 2 – Backend: Estoque + Qualidade
 - Entidade `InventoryMovement`
