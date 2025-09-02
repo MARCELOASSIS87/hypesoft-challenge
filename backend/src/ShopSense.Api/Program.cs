@@ -48,7 +48,8 @@ app.MapCategories();
 app.MapProducts();
 // Endpoints de inventory
 app.MapInventory();
-
+// Endpoints de baixo estoque
+app.MapProductsLowStock();
 
 // ===== Healthcheck simples (Mongo) =====
 app.MapGet("/health", async (IMongoDatabase db) =>
