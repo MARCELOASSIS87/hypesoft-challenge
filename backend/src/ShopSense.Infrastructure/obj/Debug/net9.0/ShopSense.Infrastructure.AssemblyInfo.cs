@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ShopSense.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2dd2d644a62e61efa5b905669a1480173f62ebdd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4915499799f5eabad26e4f8c2ebd07e3ae7b7fa0")]
 [assembly: System.Reflection.AssemblyProductAttribute("ShopSense.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ShopSense.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
