@@ -42,7 +42,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+// Endpoints de Categorias
 app.MapCategories();
+// Endpoints de products
+app.MapProducts();
+
 // ===== Healthcheck simples (Mongo) =====
 app.MapGet("/health", async (IMongoDatabase db) =>
 {
