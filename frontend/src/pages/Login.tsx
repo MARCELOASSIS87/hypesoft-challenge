@@ -26,17 +26,13 @@ const Login: React.FC = () => {
     defaultValues: { email: '' },
   });
 
-  const onSubmit = async (_data: FormValues) => {
-    // Vamos deixar Keycloak cuidar do fluxo.
-    await login({
-      redirectUri: `${window.location.origin}/dashboard`,
-    });
+  // sem parâmetro para evitar unused var
+  const onSubmit = async () => {
+    await login({ redirectUri: `${window.location.origin}/dashboard` });
   };
 
   const loginWithKeycloak = async () => {
-    await login({
-      redirectUri: `${window.location.origin}/dashboard`,
-    });
+    await login({ redirectUri: `${window.location.origin}/dashboard` });
   };
 
   return (
@@ -52,9 +48,7 @@ const Login: React.FC = () => {
             <div className="grid gap-2">
               <Label htmlFor="email">E-mail</Label>
               <Input id="email" placeholder="seu@email.com" {...register('email')} />
-              {errors.email && (
-                <span className="text-sm text-destructive">{errors.email.message}</span>
-              )}
+              {errors.email && <span className="text-sm text-destructive">{errors.email.message}</span>}
             </div>
 
             <Button type="submit" className="w-full" disabled={!initialized || isSubmitting}>

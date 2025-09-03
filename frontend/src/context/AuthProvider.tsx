@@ -1,55 +1,23 @@
-import React, { createContext, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import type Keycloak from 'keycloak-js';
 import { keycloak, keycloakClientId, initKeycloak } from '@/lib/keycloak';
 import { extractRealmRoles, extractClientRoles, hasAnyRole } from '@/utils/roles';
-
-type AuthContextValue = {
-  initialized: boolean;
-  authenticated: boolean;
-  profile:
-    | {
-        sub?: string;
-        name?: string;
-        email?: string;
-        preferred_username?: string;
-      }
-    | null;
-  realmRoles: string[];
-  clientRoles: string[];
-  token: string | undefined;
-  login: (opts?: Keycloak.KeycloakLoginOptions) => Promise<void>;
-  logout: () => Promise<void>;
-  refresh: () => Promise<void>;
-  hasRoles: (roles: string[] | undefined) => boolean;
-};
-
-export const AuthContext = createContext<AuthContextValue>({
-  initialized: false,
-  authenticated: false,
-  profile: null,
-  realmRoles: [],
-  clientRoles: [],
-  token: undefined,
-  login: async () => {},
-  logout: async () => {},
-  refresh: async () => {},
-  hasRoles: () => false,
-});
+import { AuthContext, type AuthContextType, type MinimalTokenParsed } from './auth-context';
 
 export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [initialized, setInitialized] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
-  const [profile, setProfile] = useState<AuthContextValue['profile']>(null);
+  const [profile, setProfile] = useState<AuthContextType['profile']>(null);
   const [realmRoles, setRealmRoles] = useState<string[]>([]);
   const [clientRoles, setClientRoles] = useState<string[]>([]);
   const [token, setToken] = useState<string | undefined>(undefined);
 
   const populateFromToken = useCallback(async () => {
-    const tokenParsed = keycloak.tokenParsed;
-    setToken(keycloak.token);
+    const tokenParsed = keycloak.tokenParsed as MinimalTokenParsed | undefined;
+    setToken(keycloak.token ?? undefined);
     setRealmRoles(extractRealmRoles(tokenParsed));
     setClientRoles(extractClientRoles(tokenParsed, keycloakClientId));
 
-    // Perfil básico
     setProfile({
       sub: tokenParsed?.sub,
       name: tokenParsed?.name,
@@ -59,34 +27,28 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   }, []);
 
   const ensureSessionRefresh = useCallback(() => {
-    // Atualiza token automaticamente
-    const interval = window.setInterval(async () => {
+    const id = window.setInterval(async () => {
       try {
-        const refreshed = await keycloak.updateToken(30); // refresh se expira em <30s
-        if (refreshed) {
-          setToken(keycloak.token);
-        }
+        const refreshed = await keycloak.updateToken(30);
+        if (refreshed) setToken(keycloak.token ?? undefined);
       } catch (e) {
         console.warn('[Keycloak] updateToken falhou', e);
       }
     }, 20_000);
-
-    return () => window.clearInterval(interval);
+    return () => window.clearInterval(id);
   }, []);
 
   useEffect(() => {
     (async () => {
       const ok = await initKeycloak();
       setAuthenticated(ok);
-
       if (ok) {
         await populateFromToken();
         const cleanup = ensureSessionRefresh();
         setInitialized(true);
         return () => cleanup();
-      } else {
-        setInitialized(true);
       }
+      setInitialized(true);
     })();
   }, [ensureSessionRefresh, populateFromToken]);
 
@@ -103,15 +65,15 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     await populateFromToken();
   }, [populateFromToken]);
 
-  const hasRoles = useCallback(
-    (required: string[] | undefined) => {
+  const hasRoles = useCallback<AuthContextType['hasRoles']>(
+    (required) => {
       const all = new Set([...realmRoles, ...clientRoles]);
-      return hasAnyRole([...all], required);
+      return hasAnyRole([...all], required ?? []);
     },
     [realmRoles, clientRoles]
   );
 
-  const value = useMemo<AuthContextValue>(
+  const value = useMemo<AuthContextType>(
     () => ({
       initialized,
       authenticated,
@@ -129,3 +91,5 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
+
+export default AuthProvider;

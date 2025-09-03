@@ -5,8 +5,6 @@ const realm = import.meta.env.VITE_KEYCLOAK_REALM as string;
 const clientId = import.meta.env.VITE_KEYCLOAK_CLIENT_ID as string;
 
 if (!url || !realm || !clientId) {
-  // Ajuda a identificar .env faltando
-  // eslint-disable-next-line no-console
   console.warn(
     '[Keycloak] Variáveis ausentes: VITE_KEYCLOAK_URL, VITE_KEYCLOAK_REALM, VITE_KEYCLOAK_CLIENT_ID'
   );
@@ -27,11 +25,9 @@ export async function initKeycloak(): Promise<boolean> {
       pkceMethod: 'S256',
       silentCheckSsoRedirectUri: `${window.location.origin}/silent-check-sso.html`,
       checkLoginIframe: true,
-      // enableLogging: true, // habilite se quiser depurar
     });
     return authenticated;
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error('[Keycloak] init error', e);
     return false;
   }
