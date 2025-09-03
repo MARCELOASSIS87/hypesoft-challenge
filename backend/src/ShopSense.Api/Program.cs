@@ -4,8 +4,11 @@ using ShopSense.Domain.Repositories;
 using ShopSense.Infrastructure.Repositories.Mongo;
 using ShopSense.Api; // habilita app.MapCategories()
 using MongoDB.Bson.Serialization.Conventions;
-using ShopSense.Api.Extensions;       // AddDomainServices
+using ShopSense.Api.Extensions;       // (mantida, caso você use outras extensões aqui)
+using ShopSense.Api.Endpoints;
 using ShopSense.Api.Middlewares;      // UseRequestId
+using ShopSense.Application;          // ISystemReadiness
+using ShopSense.Infrastructure.Services; // SystemReadiness
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +34,8 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IInventoryMovementRepository, InventoryMovementRepository>();
 
-builder.Services.AddDomainServices(builder.Configuration);
+// Readiness (registrar aqui para evitar extensão duplicada em Infrastructure)
+builder.Services.AddSingleton<ISystemReadiness, SystemReadiness>();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -45,7 +49,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseRequestId();
+
 // Endpoints de Categorias
 app.MapCategories();
 // Endpoints de products
@@ -54,6 +60,9 @@ app.MapProducts();
 app.MapInventory();
 // Endpoints de baixo estoque
 app.MapProductsLowStock();
+
+// Endpoint de readiness (deve existir em Endpoints/ReadinessEndpoints.cs no mesmo padrão)
+app.MapReadinessEndpoints();
 
 // ===== Healthcheck simples (Mongo) =====
 app.MapGet("/health", async (IMongoDatabase db) =>
@@ -73,6 +82,5 @@ app.MapGet("/health", async (IMongoDatabase db) =>
 .WithName("Health")
 .Produces(StatusCodes.Status200OK)
 .Produces(StatusCodes.Status500InternalServerError);
-// Endpoints de categorias
 
 app.Run();

@@ -16,7 +16,7 @@ Adotado fluxo Scrum/Kanban simplificado, com entregas diárias incrementais.
 - Entidade `InventoryMovement` Ok
 - Endpoints de movimentação de estoque - OK
 - Endpoint “estoque baixo” (produtos com `stock.min` > `quantity`) OK
-- Health checks (`/health`, `/ready`)
+- Health checks (`/health`, `/ready`) 
 - Logging estruturado com Serilog
 - **Testes unitários representativos** (xUnit + FluentAssertions):
   - Cobertura em regras críticas de negócio (CRUD, estoque baixo, movimentação)
