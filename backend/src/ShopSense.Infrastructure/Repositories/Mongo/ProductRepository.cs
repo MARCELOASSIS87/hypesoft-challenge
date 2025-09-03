@@ -1,4 +1,5 @@
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using ShopSense.Domain.Entities;
 using ShopSense.Domain.Repositories;
@@ -133,26 +134,28 @@ public sealed class ProductRepository : IProductRepository
     /// Documento de persistência (formato salvo no MongoDB).
     /// Mantido separado do domínio para controle explícito do mapeamento.
     /// </summary>
+    // Objeto aninhado exigido pelo schema: stock.quantity, stock.min
+    private sealed record StockDocument(
+        [property: BsonElement("quantity")] int Quantity,
+        [property: BsonElement("min")] int Min
+    );
     private sealed record ProductDocument(
-        ObjectId Id,
-        string Name,
-        string Slug,
-        string? Description,
-        decimal Price,          // decimal em C# -> Decimal128 no Mongo
-        string? Sku,
-        string? Barcode,
-        ObjectId CategoryId,
-        List<string> Images,
-        int StockQuantity,
-        int StockMin,
-        string Status,
-        DateTime CreatedAt,
-        DateTime UpdatedAt
-    )
+    ObjectId Id,
+    string Name,
+    string Slug,
+    string? Description,
+    decimal Price,
+    string? Sku,
+    string? Barcode,
+    ObjectId CategoryId,
+    List<string> Images,
+    [property: BsonElement("stock")] StockDocument Stock, // agora "stock" é objeto
+    int StockMin,                                         // se seu schema não usa esse campo solto, manter aqui não atrapalha
+    string Status,
+    DateTime CreatedAt,
+    DateTime UpdatedAt
+)
     {
-        /// <summary>
-        /// Converte o documento de banco para a entidade de domínio.
-        /// </summary>
         public Product ToDomain() => new()
         {
             Id = Id.ToString(),
@@ -163,23 +166,18 @@ public sealed class ProductRepository : IProductRepository
             Sku = Sku,
             Barcode = Barcode,
             CategoryId = CategoryId.ToString(),
-            Images = Images ?? new(),
-            StockQuantity = StockQuantity,
-            StockMin = StockMin,
+            Images = Images,
+            StockQuantity = Stock?.Quantity ?? 0,
+            StockMin = Stock?.Min ?? StockMin, // compatibilidade
             Status = Status,
             CreatedAt = CreatedAt,
             UpdatedAt = UpdatedAt
         };
 
-        /// <summary>
-        /// Converte a entidade de domínio para documento persistível.
-        /// - Gera ObjectId se Id não vier preenchido
-        /// - Atualiza timestamps
-        /// </summary>
         public static ProductDocument FromDomain(Product p)
         {
             var oid = ObjectId.TryParse(p.Id, out var parsed) ? parsed : ObjectId.GenerateNewId();
-            var catOid = ObjectId.TryParse(p.CategoryId, out var parsedCat) ? parsedCat : ObjectId.Empty;
+            var cid = ObjectId.TryParse(p.CategoryId, out var parsedCat) ? parsedCat : ObjectId.Empty;
 
             return new ProductDocument(
                 oid,
@@ -189,13 +187,13 @@ public sealed class ProductRepository : IProductRepository
                 p.Price,
                 p.Sku,
                 p.Barcode,
-                catOid,
-                p.Images ?? new(),
-                p.StockQuantity,
-                p.StockMin,
+                cid,
+                p.Images ?? new List<string>(),
+                new StockDocument(p.StockQuantity, p.StockMin), // grava como { quantity, min }
+                p.StockMin, // compat
                 string.IsNullOrWhiteSpace(p.Status) ? "active" : p.Status,
                 p.CreatedAt == default ? DateTime.UtcNow : p.CreatedAt,
-                DateTime.UtcNow
+                p.UpdatedAt == default ? DateTime.UtcNow : p.UpdatedAt
             );
         }
     }

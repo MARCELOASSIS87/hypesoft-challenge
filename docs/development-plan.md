@@ -13,9 +13,9 @@ Adotado fluxo Scrum/Kanban simplificado, com entregas diárias incrementais.
 - Commit + ADR sobre modelagem do domínio - Ok
 
 ### Dia 2 – Backend: Estoque + Qualidade
-- Entidade `InventoryMovement`
-- Endpoints de movimentação de estoque
-- Endpoint “estoque baixo” (produtos com `stock.min` > `quantity`)
+- Entidade `InventoryMovement` Ok
+- Endpoints de movimentação de estoque - OK
+- Endpoint “estoque baixo” (produtos com `stock.min` > `quantity`) OK
 - Health checks (`/health`, `/ready`)
 - Logging estruturado com Serilog
 - **Testes unitários representativos** (xUnit + FluentAssertions):

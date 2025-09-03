@@ -3,24 +3,17 @@ bin/
 obj/
 out/
 
-# Ignore user-specific files
-*.user
-*.rsuser
-*.suo
-*.userosscache
-*.sln.docstates
-
-# Ignore Rider/VSCode stuff
+# IDE
 .idea/
 .vscode/
 
-# Ignore NuGet packages
+# NuGet
 *.nupkg
 *.snupkg
 packages/
 
-# Ignore logs
+# Logs
 *.log
 
-# Ignore environment files
+# Env
 .env

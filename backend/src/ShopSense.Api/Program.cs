@@ -3,8 +3,9 @@ using MongoDB.Driver;
 using ShopSense.Domain.Repositories;
 using ShopSense.Infrastructure.Repositories.Mongo;
 using ShopSense.Api; // habilita app.MapCategories()
-// no topo
 using MongoDB.Bson.Serialization.Conventions;
+using ShopSense.Api.Extensions;       // AddDomainServices
+using ShopSense.Api.Middlewares;      // UseRequestId
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,8 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IInventoryMovementRepository, InventoryMovementRepository>();
 
+builder.Services.AddDomainServices(builder.Configuration);
+
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -42,6 +45,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseRequestId();
 // Endpoints de Categorias
 app.MapCategories();
 // Endpoints de products
