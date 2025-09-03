@@ -1,0 +1,85 @@
+id category: 68b7924af5796311d51ded69
+
+{
+  "name": "Notebook Dell Inspiron 15",
+  "slug": "notebook-dell-inspiron-15",
+  "description": "i7, 16GB RAM, SSD 512GB",
+  "price": 3500.00,
+  "sku": "NB-DELL-INS15",
+  "barcode": "7891234567890",
+  "categoryId": "68b7924af5796311d51ded69",
+  "images": ["https://example.com/img1.jpg"],
+  "stockQuantity": 10,
+  "stockMin": 2,
+  "status": "active"
+}
+ id_product 68b79c938c08ff21a46f138c
+
+Entrada de estoque (in)
+{
+  "productId": "68b79c938c08ff21a46f138c",
+  "type": "in",
+  "quantity": 0,
+  "reason": "Reposição do fornecedor",
+  "ref": "PO-12345"
+}
+
+Saída de estoque (out)
+{
+  "productId": "68b79c938c08ff21a46f138c",
+  "type": "out",
+  "quantity": 9999,
+  "reason": "Venda balcão",
+  "ref": "SALE-987"
+}
+
+Ajuste (adjustment)
+{
+  "ProductId": "68b79c938c08ff21a46f138c",
+  "Type": "adjustment",
+  "Quantity": -2,
+  "reason": "Perda/avaria",
+  "ref": "AUD-2025-09"
+}
+⚠️ Alinhamento de trabalho — Projeto ShopSense (continuar a partir do Dia 2)
+
+1) Nomenclatura e estrutura
+- Sempre usar prefixo ShopSense.* (NUNCA Hypesoft.* no código).
+- Estrutura fixa:
+  backend/src/
+    ShopSense.Domain
+      /Entities, /Repositories, /Services
+    ShopSense.Application
+    ShopSense.Infrastructure
+      /Repositories/Mongo
+    ShopSense.Api
+      /Endpoints, /Middlewares, /Extensions, /DTOs
+- Arquivos são criados/editados com caminhos COMPLETOS e conteúdo COMPLETO (quando sobrescrever).
+- Um comando por vez, sem adivinhação. Se precisar mudar algo, informe caminho exato e mostre o arquivo inteiro corrigido.
+
+2) Política de estoque (já implementada)
+- Service: InventoryService.ApplyStockChange
+  - "in": quantity > 0, soma
+  - "out": quantity > 0, subtrai, NÃO pode ficar negativo
+  - "adjustment": quantity != 0, pode ser negativo, NÃO pode ficar negativo
+- POST /inventory: aplica regra, persiste movimento, atualiza produto; 201/400/404/409.
+
+3) Mongo e mapeamento
+- products.stock é OBJETO { quantity, min }.
+- No domínio, continuamos com StockQuantity/StockMin.
+- O repositório Mongo converte (ProductDocument ⇄ Product).
+- Usar [property: BsonElement("...")] quando necessário em records posicionais.
+
+4) Health & Logging
+- /health já existe (ping simples).
+- /ready e Serilog vão ser implementados agora no Dia 2 (parte 2).
+
+5) Commits e ADR
+- Commits pequenos em Conventional Commits.
+- Toda decisão de arquitetura ou política: criar ADR em docs/adr/00NN-*.md.
+
+6) Rotina de verificação
+- Após cada alteração: dotnet build → dotnet run → testar no Swagger.
+- Forneça prints/erros exatos; evite suposições.
+
+
