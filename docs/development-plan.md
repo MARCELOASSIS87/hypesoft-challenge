@@ -16,14 +16,14 @@ Adotado fluxo Scrum/Kanban simplificado, com entregas diárias incrementais.
 - Entidade `InventoryMovement` Ok
 - Endpoints de movimentação de estoque - OK
 - Endpoint “estoque baixo” (produtos com `stock.min` > `quantity`) OK
-- Health checks (`/health`, `/ready`) 
-- Logging estruturado com Serilog
-- **Testes unitários representativos** (xUnit + FluentAssertions):
-  - Cobertura em regras críticas de negócio (CRUD, estoque baixo, movimentação)
+- Health checks (`/health`, `/ready`) ok
+- Logging estruturado com Serilog ok
+- **Testes unitários representativos** (xUnit + FluentAssertions): ok
+  - Cobertura em regras críticas de negócio (CRUD, estoque baixo, movimentação) ok
   - Meta futura: expandir cobertura até **85%**, mas neste desafio manteremos foco em pontos essenciais
 
 ### Dia 3 – Frontend: UI + Integração
-- Criar projeto React (Vite + Tailwind + Shadcn)
+- Criar projeto React (Vite + Tailwind + Shadcn) ok 
 - Tela de Login com Keycloak (via OIDC)
 - Tela de Produtos: listar, buscar, criar, editar, excluir
 - Tela de Categorias: CRUD simples
