@@ -1,0 +1,41 @@
+# ADR 0014 — Fechamento do Dia 3 (Frontend)
+
+## Status
+Accepted — 2025-09-03
+
+## Contexto
+O **Dia 3** do plano de desenvolvimento do desafio Hypesoft (ShopSense) previa a entrega do frontend inicial com autenticação e integração real com o backend.  
+Os objetivos principais eram:
+- Implementar autenticação via **Keycloak (OIDC)**.
+- Garantir **roles avançadas** (Admin, Manager, User).
+- Construir páginas de **Produtos** e **Categorias** com CRUD completo integrado ao backend.
+- Registrar decisões arquiteturais relevantes.
+
+## Decisão
+- Implementado login/logout via Keycloak OIDC, com PKCE e `check-sso`.
+- Criados guards de role (`WithRoles`) aplicados às rotas:
+  - Products → acessível a Admin/Manager.
+  - Categories → acessível somente a Admin.
+- Criadas páginas **Products** e **Categories** com:
+  - Listagem.
+  - Criação (POST).
+  - Edição (PUT).
+  - Remoção (DELETE).
+- Utilizado proxy do Vite para evitar problemas de CORS.
+- Criado ADR 0013 documentando a estratégia de autenticação e autorização.
+
+## Consequências
+- O frontend agora possui autenticação robusta e controle de acesso por roles.
+- O CRUD de Produtos e Categorias está conectado ao backend real.
+- Base sólida para os próximos passos (Dashboard e métricas).
+- Complexidade de configuração aumentou com Keycloak, mas atende aos critérios de segurança.
+
+## Critérios de Aceite
+- Usuários Admin/Manager conseguem gerenciar produtos.
+- Usuário Admin consegue gerenciar categorias.
+- Usuário comum não consegue acessar as rotas protegidas.
+- Produtos e Categorias podem ser criados, listados, editados e removidos com persistência real.
+
+## Referências
+- ADR 0013 — Autenticação OIDC com Keycloak
+- Development Plan — Dia 3
