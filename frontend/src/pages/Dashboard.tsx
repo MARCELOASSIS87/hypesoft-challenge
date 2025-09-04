@@ -1,134 +1,258 @@
-import React from 'react';
-import AppLayout from '@/components/layout/AppLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+// src/pages/Dashboard.tsx
+import { useMemo, useState } from "react";
+import { Search } from "lucide-react";
+import { useProducts, useCategories } from "@/hooks/useProducts";
+import StatCard from "@/components/cards/StatCard";
+import ProductsByCategoryChart from "@/components/charts/ProductsByCategoryChart";
+import AppLayout from "@/components/layout/AppLayout";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import type { Product } from "@/types/product";
 
-// Mini sparkline simples em SVG
-const Sparkline: React.FC<{ points?: number[] }> = ({ points = [10, 12, 8, 14, 13, 18, 16] }) => {
-  const path = points
-    .map((y, i) => `${i === 0 ? 'M' : 'L'} ${i * 20} ${40 - y}`)
-    .join(' ');
-  return (
-    <svg viewBox="0 0 120 40" className="w-full h-10">
-      <path d={path} fill="none" stroke="currentColor" className="text-indigo-600" strokeWidth="2" />
-    </svg>
-  );
-};
+function currencyBRL(n: number) {
+  return n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
 
-const StatCard: React.FC<{ title: string; value: string | number; hint?: string; icon?: string; children?: React.ReactNode }> = ({
-  title,
-  value,
-  hint,
-  icon = '📦',
-  children,
-}) => (
-  <Card className="h-full">
-    <CardHeader className="pb-2">
-      <div className="flex items-center justify-between">
-        <CardTitle className="text-sm text-muted-foreground">{title}</CardTitle>
-        <span className="text-lg">{icon}</span>
-      </div>
-    </CardHeader>
-    <CardContent>
-      <div className="text-3xl font-semibold">{value}</div>
-      {hint && <div className="text-xs text-muted-foreground mt-1">{hint}</div>}
-      {children}
-    </CardContent>
-  </Card>
-);
+export default function Dashboard() {
+  const { data: products = [], isLoading: loadingP } = useProducts();
+  const { data: categories = [], isLoading: loadingC } = useCategories();
+  const [query, setQuery] = useState("");
 
-const tags = [
-  { label: 'Stock Adjustment', color: 'bg-blue-100 text-blue-700' },
-  { label: 'New Product', color: 'bg-emerald-100 text-emerald-700' },
-  { label: 'Customer Review', color: 'bg-amber-100 text-amber-700' },
-  { label: 'Product Update', color: 'bg-purple-100 text-purple-700' },
-  { label: 'Promotion', color: 'bg-pink-100 text-pink-700' },
-  { label: 'Deletion', color: 'bg-rose-100 text-rose-700' },
-];
+  const {
+    totalProducts,
+    lowStock,
+    chartData,
+    recentActivities,
+    filteredLowStock,
+  } = useMemo(() => {
+    // totais
+    const totalProducts = products.length;
+    
+    // nomes de categoria resolvidos (para render)
+    const getCatName = (p: Product) =>
+      p.categoryName ||
+      categories.find((c) => c.id === p.categoryId)?.name ||
+      "Sem categoria";
 
-const activities = Array.from({ length: 10 }).map((_, i) => ({
-  product: ['Linen Shirt', 'Jeans Jacket', 'Ankle Pants', 'Black T-Shirt', 'Slim Fit Jeans'][i % 5],
-  tag: tags[i % tags.length],
-  details:
-    [
-      'Stock adjusted from 100 to 90 units after bulk order.',
-      'Price: $65.00. Stock: 70 units.',
-      '“Great quality and fit.” Rating: 5 stars.',
-      'Price updated to $55.00. Stock: 80 units.',
-      '10% off summer sale. Duration: Jun 27 – Jul 15, 2024',
-      'Discontinued due to low sales. Stock: 0 units.',
-      'Lightweight and breathable. Price: $45.00. Stock: 100 units.',
-      'Stock increased from 40 to 60 units after restock.',
-    ][i % 8],
-  date: ['June 29, 2024', 'June 28, 2024', 'June 27, 2024', 'June 26, 2024'][i % 4],
-}));
+    // baixo estoque (<10 conforme README)
+    const lowStock = [...products]
+      .filter((p) => (p.quantity ?? 0) < 10)
+      .sort((a, b) => (a.quantity ?? 0) - (b.quantity ?? 0));
 
-const Dashboard: React.FC = () => {
+    // gráfico por categoria
+    const counter = new Map<string, number>();
+    products.forEach((p) => {
+      const cat = getCatName(p);
+      counter.set(cat, (counter.get(cat) || 0) + 1);
+    });
+    const chartData = Array.from(counter.entries()).map(([category, count]) => ({
+      category,
+      count,
+    }));
+
+    // “Recent Activities” inspirado no mock:
+    // usamos os 8 produtos mais recentes pelo nome (sem inventar timestamps).
+    const recentActivities = [...products]
+      .slice(0, 8)
+      .map((p) => ({
+        id: p.id,
+        name: p.name,
+        category: getCatName(p),
+        price: p.price,
+        quantity: p.quantity ?? 0,
+        badge:
+          (p.quantity ?? 0) < 10 ? "Low Stock" : (p.price ?? 0) > 0 ? "Product Update" : "New Product",
+      }));
+
+    // filtro de search para a coluna direita
+    const filteredLowStock = lowStock.filter((p) =>
+      p.name.toLowerCase().includes(query.toLowerCase())
+    );
+
+    return {
+      totalProducts,
+      lowStock,
+      chartData,
+      recentActivities,
+      filteredLowStock,
+    };
+  }, [products, categories, query]);
+
+  if (loadingP || loadingC) {
+    return (
+      <AppLayout>
+        <div className="p-6 text-sm opacity-70">Carregando dashboard…</div>
+      </AppLayout>
+    );
+  }
+
   return (
     <AppLayout>
-      {/* Top stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-        <StatCard title="Total Products" value={586} hint="+5 products · from last month" icon="📦" />
-        <StatCard title="Average Rating" value={4.8} hint="+0.2 · from last month" icon="⭐" />
-        <StatCard title="Sales Trends" value="" icon="📈">
-          <Sparkline />
-        </StatCard>
-        <StatCard title="Low Stock" value={5} hint="are under 50 items" icon="⚠️" />
-      </div>
-
-      {/* Recent activities header */}
-      <div className="mt-6 flex items-center gap-2">
-        <div className="text-sm font-medium">Recent Activities</div>
-        <div className="ml-auto flex items-center gap-2">
-          <div className="relative">
-            <input
-              placeholder="Search"
-              className="h-9 w-52 rounded-md border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-            <span className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground">🔎</span>
+      <div className="p-6 space-y-6">
+        {/* Header + Tabs (estético, seguindo o protótipo do README) */}
+        <div className="flex flex-col gap-2">
+          <h1 className="text-2xl font-semibold">Overview</h1>
+          <div className="flex flex-wrap items-center gap-2 text-sm">
+            <button className="rounded-full bg-violet-600/10 px-3 py-1 font-medium text-violet-700 dark:text-violet-300">
+              Overview
+            </button>
+            <button className="rounded-full px-3 py-1 text-gray-500 hover:text-gray-700 dark:text-gray-400">
+              Product List
+            </button>
+            <button className="rounded-full px-3 py-1 text-gray-500 hover:text-gray-700 dark:text-gray-400">
+              Inventory Management
+            </button>
+            <button className="rounded-full px-3 py-1 text-gray-500 hover:text-gray-700 dark:text-gray-400">
+              Sales Performance
+            </button>
+            <button className="rounded-full px-3 py-1 text-gray-500 hover:text-gray-700 dark:text-gray-400">
+              Marketing
+            </button>
+            <button className="rounded-full px-3 py-1 text-gray-500 hover:text-gray-700 dark:text-gray-400">
+              Customer Feedback
+            </button>
           </div>
-          <Button variant="outline" size="sm">Filter</Button>
-          <Button variant="outline" size="sm">$</Button>
-          <Button variant="outline" size="sm">⋯</Button>
         </div>
-      </div>
 
-      {/* Table */}
-      <div className="mt-3 overflow-hidden rounded-xl border bg-white">
-        <table className="w-full text-sm">
-          <thead className="bg-muted/60">
-            <tr className="text-muted-foreground">
-              <th className="text-left font-medium p-3">Product</th>
-              <th className="text-left font-medium p-3">Activity Type</th>
-              <th className="text-left font-medium p-3">Details</th>
-              <th className="text-left font-medium p-3">Date</th>
-              <th className="text-left font-medium p-3">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {activities.map((row, idx) => (
-              <tr key={idx} className="border-t">
-                <td className="p-3">
-                  <div className="flex items-center gap-3">
-                    <div className="h-9 w-9 rounded-md bg-neutral-200" />
-                    <div className="font-medium">{row.product}</div>
+        {/* Cards no topo */}
+        <section className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <StatCard title="Total Products" value={totalProducts} helper="+variação mensal (mock)" />
+          <StatCard title="Average Rating" value="4.8" helper="+0.2 (mock)" />
+          <StatCard title="Sales Trends" value="↑" helper="último mês (mock)" />
+          <StatCard title="Low Stock" value={lowStock.length} helper="produtos < 10 un." />
+        </section>
+
+        <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Centro: gráfico e atividades, ocupando 2 colunas */}
+          <div className="lg:col-span-2 space-y-6">
+            <div>
+              <h2 className="mb-2 text-sm font-medium text-gray-600">
+                Produtos por categoria
+              </h2>
+              <ProductsByCategoryChart data={chartData} />
+            </div>
+
+            {/* Recent Activities (lista grande ao estilo do mock) */}
+            <div className="rounded-2xl border border-gray-200/50 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+              <div className="flex items-center justify-between p-4">
+                <div className="text-base font-semibold">Recent Activities</div>
+                <div className="flex items-center gap-2">
+                  <div className="relative">
+                    <Search className="pointer-events-none absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+                    <Input
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      placeholder="Search"
+                      className="pl-8 w-48"
+                    />
                   </div>
-                </td>
-                <td className="p-3">
-                  <span className={`px-2 py-1 rounded-full text-xs ${row.tag.color}`}>{row.tag.label}</span>
-                </td>
-                <td className="p-3 text-muted-foreground">{row.details}</td>
-                <td className="p-3">{row.date}</td>
-                <td className="p-3">
-                  <button className="text-indigo-700 hover:underline">View</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  <Button variant="outline" className="hidden md:inline-flex">
+                    Filter
+                  </Button>
+                  <Button variant="outline" className="hidden md:inline-flex">
+                    Show
+                  </Button>
+                  <Button variant="outline" className="hidden md:inline-flex">
+                    Date
+                  </Button>
+                </div>
+              </div>
+              <div className="divide-y divide-gray-200/60 dark:divide-zinc-800">
+                <div className="grid grid-cols-12 px-4 py-2 text-xs text-gray-500">
+                  <div className="col-span-4">Product</div>
+                  <div className="col-span-2">Activity Type</div>
+                  <div className="col-span-4">Details</div>
+                  <div className="col-span-2 text-right">Action</div>
+                </div>
+                {recentActivities.map((a) => (
+                  <div
+                    key={a.id}
+                    className="grid grid-cols-12 items-center px-4 py-3 text-sm"
+                  >
+                    <div className="col-span-4 flex items-center gap-3">
+                      <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-zinc-800" />
+                      <div className="min-w-0">
+                        <div className="truncate font-medium">{a.name}</div>
+                        <div className="truncate text-xs text-gray-500">{a.category}</div>
+                      </div>
+                    </div>
+                    <div className="col-span-2">
+                      <span
+                        className={`rounded-full px-2 py-1 text-xs ${
+                          a.badge === "Low Stock"
+                            ? "bg-rose-100 text-rose-700"
+                            : a.badge === "Product Update"
+                            ? "bg-blue-100 text-blue-700"
+                            : "bg-emerald-100 text-emerald-700"
+                        }`}
+                      >
+                        {a.badge}
+                      </span>
+                    </div>
+                    <div className="col-span-4 text-gray-600 dark:text-gray-300">
+                      {a.badge === "Low Stock"
+                        ? `Stock: ${a.quantity} units`
+                        : `Price: ${currencyBRL(a.price ?? 0)} | Stock: ${a.quantity}`}
+                    </div>
+                    <div className="col-span-2 text-right">
+                      <Button size="sm" variant="outline">
+                        View
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Direita: Low Stock (coluna com busca no topo) */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-medium text-gray-600">Low Stock</h2>
+              <span className="rounded-full bg-rose-100 px-2 py-0.5 text-xs font-medium text-rose-700">
+                {lowStock.length} itens
+              </span>
+            </div>
+
+            <div className="rounded-2xl border border-gray-200/50 bg-white p-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+              <div className="relative mb-3">
+                <Search className="pointer-events-none absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+                <Input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search product"
+                  className="pl-8"
+                />
+              </div>
+
+              <ul className="divide-y divide-gray-200/60 dark:divide-zinc-800">
+                {filteredLowStock.length === 0 && (
+                  <li className="p-3 text-sm text-gray-500">
+                    Nenhum item com baixo estoque.
+                  </li>
+                )}
+                {filteredLowStock.slice(0, 8).map((p) => (
+                  <li key={p.id} className="flex items-center justify-between gap-3 p-3">
+                    <div className="min-w-0">
+                      <div className="truncate text-sm font-medium">{p.name}</div>
+                      <div className="truncate text-xs text-gray-500">
+                        {p.categoryName ?? "Sem categoria"}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold">{p.quantity ?? 0} un.</div>
+                      <div className="text-xs text-gray-500">{currencyBRL(p.price || 0)}</div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              <div className="pt-2 text-right">
+                <Button size="sm" variant="outline">View all</Button>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </AppLayout>
   );
-};
-
-export default Dashboard;
+}

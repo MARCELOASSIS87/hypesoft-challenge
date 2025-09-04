@@ -41,23 +41,33 @@ Ajuste (adjustment)
   "reason": "Perda/avaria",
   "ref": "AUD-2025-09"
 }
-No Dia 4 o foco é Dashboard + Extras (segundo o development plan):
+Seguir a bússola do README e do development-plan
+→ Nunca inventar requisito. Se não está no README ou no plano, não é obrigatório.
+→ O que não está lá só entra como ponto extra se você pedir.
 
-Montar a Dashboard com estatísticas e cards conforme protótipo do README.
+Um passo de cada vez
+→ Eu só avanço depois que você testa/confirma.
+→ Sempre mando arquivos inteiros prontos pra colar no VSCode (sem trechos soltos).
 
-Integração de gráficos (shadcn/ui + chart lib).
+Commits e ADRs sempre
+→ Uso Conventional Commits.
+→ Cada decisão relevante vira um ADR (docs/adr/00NN-*.md).
 
-Mostrar dados reais do backend (produtos, categorias, vendas se disponíveis).
+Sem adivinhação
+→ Se não sei o schema, peço Swagger.
+→ Se não sei se precisa de página nova, pergunto
+→ Se preciso criar um arquivo peço os dados e infomrações não chuto nem deduzo nada
+→ Olho o README/plan primeiro.
 
-Extras para pontuação: métricas de qualidade, responsividade mobile-first, experiência de usuário refinada.
+Explicação + Solução
+→ Explico o conceito apenas quando voce perguntar (ex.: “slug”, “boilerplate”).
+→ Depois já entrego o que você cola no código (serviço, page, config).
+→ Ajustes pontuais eu deixo bem claro qual arquivo e quais linhas alterar mostrando o antes e depois do trecho.
+→ Comandos que forem executados no terminal eu explico que qual pasta ele deve ser executado mando o caminho duvidas pede a tree dos arquivos
 
-👉 No próximo chat, vamos trabalhar exatamente como no Dia 3:
-
-Um comando por vez.
-
-Arquivos inteiros.
-
-Commits e ADRs.
+Escalabilidade
+→ Mostro quando algo é suficiente pro desafio (mínimo exigido).
+→ Também sinalizo quando pode virar melhoria futura (extras)
 
 
 

@@ -6,6 +6,7 @@ import './index.css';
 import AuthProvider from '@/context/AuthProvider';
 import ProtectedRoute from '@/routes/ProtectedRoute';
 import WithRoles from '@/routes/WithRoles';
+import QueryProvider from '@/context/QueryProvider'; // ← adicionado
 
 import Login from '@/pages/Login';
 import Dashboard from '@/pages/Dashboard';
@@ -38,7 +39,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
+      <QueryProvider>
+        <RouterProvider router={router} />
+      </QueryProvider>
     </AuthProvider>
   );
 }
