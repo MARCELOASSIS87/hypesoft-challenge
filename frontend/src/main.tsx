@@ -5,6 +5,7 @@ import './index.css';
 
 import AuthProvider from '@/context/AuthProvider';
 import ProtectedRoute from '@/routes/ProtectedRoute';
+import WithRoles from '@/routes/WithRoles';
 
 import Login from '@/pages/Login';
 import Dashboard from '@/pages/Dashboard';
@@ -21,8 +22,8 @@ const router = createBrowserRouter([
 
   // Área autenticada
   { path: '/dashboard', element: <Private><Dashboard /></Private> },
-  { path: '/products', element: <Private><Products /></Private> },
-  { path: '/categories', element: <Private><Categories /></Private> },
+  { path: '/products', element: <Private><WithRoles roles={['Admin', 'Manager']}><Products /></WithRoles></Private> },
+  { path: '/categories', element: <Private><WithRoles roles={['Admin']}><Categories /></WithRoles></Private> },
 
   // placeholders do sidebar (desabilitados)
   { path: '/statistics', element: <Private><div className="p-6">Soon</div></Private> },

@@ -24,7 +24,7 @@ Adotado fluxo Scrum/Kanban simplificado, com entregas diárias incrementais.
 
 ### Dia 3 – Frontend: UI + Integração
 - Criar projeto React (Vite + Tailwind + Shadcn) ok 
-- Tela de Login com Keycloak (via OIDC)
+- Tela de Login com Keycloak (via OIDC) ok 
 - Tela de Produtos: listar, buscar, criar, editar, excluir
 - Tela de Categorias: CRUD simples
 - Commit + ADR sobre autenticação Keycloak
