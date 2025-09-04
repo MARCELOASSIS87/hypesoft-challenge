@@ -1,3 +1,4 @@
+// src/components/layout/Sidebar.tsx
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -16,6 +17,7 @@ const sections = [
     items: [
       { to: '/my-shop', label: 'My Shop', icon: '🏬', disabled: true },
       { to: '/products', label: 'Products', icon: '🧾' },
+      { to: '/categories', label: 'Categories', icon: '🏷️' }, // <-- adicionado
       { to: '/customers', label: 'Customers', icon: '👤', disabled: true },
       { to: '/invoice', label: 'Invoice', icon: '🧾', disabled: true },
       { to: '/messages', label: 'Messages', icon: '✉️', disabled: true },
@@ -58,8 +60,8 @@ const Sidebar: React.FC = () => {
                         item.disabled
                           ? 'text-muted-foreground/60 pointer-events-none select-none'
                           : isActive
-                          ? 'bg-indigo-600/10 text-indigo-700'
-                          : 'hover:bg-muted'
+                            ? 'bg-indigo-600/10 text-indigo-700'
+                            : 'hover:bg-muted'
                       )
                     }
                   >
