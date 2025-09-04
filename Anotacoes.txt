@@ -41,45 +41,23 @@ Ajuste (adjustment)
   "reason": "Perda/avaria",
   "ref": "AUD-2025-09"
 }
-⚠️ Alinhamento de trabalho — Projeto ShopSense (continuar a partir do Dia 2)
+No Dia 4 o foco é Dashboard + Extras (segundo o development plan):
 
-1) Nomenclatura e estrutura
-- Sempre usar prefixo ShopSense.* (NUNCA Hypesoft.* no código).
-- Estrutura fixa:
-  backend/src/
-    ShopSense.Domain
-      /Entities, /Repositories, /Services
-    ShopSense.Application
-    ShopSense.Infrastructure
-      /Repositories/Mongo
-    ShopSense.Api
-      /Endpoints, /Middlewares, /Extensions, /DTOs
-- Arquivos são criados/editados com caminhos COMPLETOS e conteúdo COMPLETO (quando sobrescrever).
-- Um comando por vez, sem adivinhação. Se precisar mudar algo, informe caminho exato e mostre o arquivo inteiro corrigido.
+Montar a Dashboard com estatísticas e cards conforme protótipo do README.
 
-2) Política de estoque (já implementada)
-- Service: InventoryService.ApplyStockChange
-  - "in": quantity > 0, soma
-  - "out": quantity > 0, subtrai, NÃO pode ficar negativo
-  - "adjustment": quantity != 0, pode ser negativo, NÃO pode ficar negativo
-- POST /inventory: aplica regra, persiste movimento, atualiza produto; 201/400/404/409.
+Integração de gráficos (shadcn/ui + chart lib).
 
-3) Mongo e mapeamento
-- products.stock é OBJETO { quantity, min }.
-- No domínio, continuamos com StockQuantity/StockMin.
-- O repositório Mongo converte (ProductDocument ⇄ Product).
-- Usar [property: BsonElement("...")] quando necessário em records posicionais.
+Mostrar dados reais do backend (produtos, categorias, vendas se disponíveis).
 
-4) Health & Logging
-- /health já existe (ping simples).
-- /ready e Serilog vão ser implementados agora no Dia 2 (parte 2).
+Extras para pontuação: métricas de qualidade, responsividade mobile-first, experiência de usuário refinada.
 
-5) Commits e ADR
-- Commits pequenos em Conventional Commits.
-- Toda decisão de arquitetura ou política: criar ADR em docs/adr/00NN-*.md.
+👉 No próximo chat, vamos trabalhar exatamente como no Dia 3:
 
-6) Rotina de verificação
-- Após cada alteração: dotnet build → dotnet run → testar no Swagger.
-- Forneça prints/erros exatos; evite suposições.
+Um comando por vez.
+
+Arquivos inteiros.
+
+Commits e ADRs.
+
 
 

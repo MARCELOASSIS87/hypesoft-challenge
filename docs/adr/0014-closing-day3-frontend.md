@@ -23,7 +23,7 @@ Os objetivos principais eram:
   - Remoção (DELETE).
 - Utilizado proxy do Vite para evitar problemas de CORS.
 - Criado ADR 0013 documentando a estratégia de autenticação e autorização.
-
+- Adotamos Minimal APIs por simplicidade no escopo do desafio; Controllers podem ser introduzidos se o projeto crescer
 ## Consequências
 - O frontend agora possui autenticação robusta e controle de acesso por roles.
 - O CRUD de Produtos e Categorias está conectado ao backend real.
