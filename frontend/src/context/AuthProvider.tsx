@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type Keycloak from 'keycloak-js';
 import { keycloak, keycloakClientId, initKeycloak } from '@/lib/keycloak';
 import { extractRealmRoles, extractClientRoles, hasAnyRole } from '@/utils/roles';
@@ -11,6 +11,8 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   const [realmRoles, setRealmRoles] = useState<string[]>([]);
   const [clientRoles, setClientRoles] = useState<string[]>([]);
   const [token, setToken] = useState<string | undefined>(undefined);
+
+  const didInit = useRef(false); // evita init duplicado no StrictMode
 
   const populateFromToken = useCallback(async () => {
     const tokenParsed = keycloak.tokenParsed as MinimalTokenParsed | undefined;
@@ -27,6 +29,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   }, []);
 
   const ensureSessionRefresh = useCallback(() => {
+    // Atualiza token periodicamente
     const id = window.setInterval(async () => {
       try {
         const refreshed = await keycloak.updateToken(30);
@@ -35,20 +38,44 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
         console.warn('[Keycloak] updateToken falhou', e);
       }
     }, 20_000);
+
+    // Também registra eventos úteis
+    keycloak.onTokenExpired = async () => {
+      try {
+        await keycloak.updateToken(60);
+        await populateFromToken();
+      } catch (e) {
+        console.warn('[Keycloak] refresh onTokenExpired falhou', e);
+      }
+    };
+
+    keycloak.onAuthLogout = () => {
+      setAuthenticated(false);
+      setProfile(null);
+      setRealmRoles([]);
+      setClientRoles([]);
+      setToken(undefined);
+    };
+
     return () => window.clearInterval(id);
-  }, []);
+  }, [populateFromToken]);
 
   useEffect(() => {
+    if (didInit.current) return; // StrictMode guard
+    didInit.current = true;
+
     (async () => {
       const ok = await initKeycloak();
       setAuthenticated(ok);
+
       if (ok) {
         await populateFromToken();
         const cleanup = ensureSessionRefresh();
         setInitialized(true);
         return () => cleanup();
+      } else {
+        setInitialized(true);
       }
-      setInitialized(true);
     })();
   }, [ensureSessionRefresh, populateFromToken]);
 

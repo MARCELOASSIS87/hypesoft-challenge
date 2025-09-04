@@ -1,4 +1,4 @@
-# ADR 0010 — Autenticação com Keycloak (OIDC) e Roles Avançadas
+# ADR 0012 — Autenticação com Keycloak (OIDC) e Roles Avançadas
 
 ## Status
 Accepted — 2025-09-03

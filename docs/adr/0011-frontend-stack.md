@@ -1,4 +1,4 @@
-# ADR 0009 — Definição da Stack do Frontend
+# ADR 0011 — Definição da Stack do Frontend
 
 ## Contexto
 O projeto ShopSense exige um frontend moderno, rápido e responsivo, integrado ao backend .NET.  
