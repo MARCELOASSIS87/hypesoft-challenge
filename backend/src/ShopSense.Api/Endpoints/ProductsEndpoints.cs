@@ -10,7 +10,7 @@ public static class ProductsEndpoints
 {
     public static void MapProducts(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/products").WithTags("Products");
+        var group = app.MapGroup("/products").WithTags("Products").RequireRateLimiting("fixed");;
 
         // GET /products?categoryId=&page=&pageSize=
         group.MapGet("/", async (IProductRepository repo, string? categoryId, int page = 1, int pageSize = 20) =>

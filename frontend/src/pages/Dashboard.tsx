@@ -8,6 +8,8 @@ import AppLayout from "@/components/layout/AppLayout";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/types/product";
+import DashboardSkeleton from '@/components/skeletons/DashboardSkeleton';
+
 
 function currencyBRL(n: number) {
   return n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -27,7 +29,7 @@ export default function Dashboard() {
   } = useMemo(() => {
     // totais
     const totalProducts = products.length;
-    
+
     // nomes de categoria resolvidos (para render)
     const getCatName = (p: Product) =>
       p.categoryName ||
@@ -79,11 +81,7 @@ export default function Dashboard() {
   }, [products, categories, query]);
 
   if (loadingP || loadingC) {
-    return (
-      <AppLayout>
-        <div className="p-6 text-sm opacity-70">Carregando dashboard…</div>
-      </AppLayout>
-    );
+    return <AppLayout><DashboardSkeleton /></AppLayout>;
   }
 
   return (
@@ -178,13 +176,12 @@ export default function Dashboard() {
                     </div>
                     <div className="col-span-2">
                       <span
-                        className={`rounded-full px-2 py-1 text-xs ${
-                          a.badge === "Low Stock"
+                        className={`rounded-full px-2 py-1 text-xs ${a.badge === "Low Stock"
                             ? "bg-rose-100 text-rose-700"
                             : a.badge === "Product Update"
-                            ? "bg-blue-100 text-blue-700"
-                            : "bg-emerald-100 text-emerald-700"
-                        }`}
+                              ? "bg-blue-100 text-blue-700"
+                              : "bg-emerald-100 text-emerald-700"
+                          }`}
                       >
                         {a.badge}
                       </span>

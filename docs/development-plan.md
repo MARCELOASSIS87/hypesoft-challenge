@@ -32,7 +32,7 @@ Adotado fluxo Scrum/Kanban simplificado, com entregas diárias incrementais.
 ### Dia 4 – Extras + Finalização
 - Dashboard: total de produtos, valor estoque, produtos com baixo estoque, gráfico por categoria ok
 - Cache básico em queries (MemoryCache no backend) 
-- Ajustes de segurança (CORS, rate limiting, headers)
+- Ajustes de segurança (CORS, rate limiting, headers) ok
 - Documentação final:
   - ADRs completas
   - README atualizado (execução, URLs, testes)

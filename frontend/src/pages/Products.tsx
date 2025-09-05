@@ -8,6 +8,8 @@ import { Label } from '@/components/ui/label';
 import { createProduct, deleteProduct, getProducts, updateProduct } from '@/services/products';
 import { getCategories } from '@/services/categories';
 import { toSlug } from '@/utils/slug';
+import TableSkeleton from '@/components/skeletons/TableSkeleton';
+import { useToast } from '@/hooks/useToast';
 
 type UIProduct = {
   _id?: string;
@@ -34,6 +36,7 @@ const Products: React.FC = () => {
   const [form, setForm] = useState<FormState>(emptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { show } = useToast();
 
   async function load() {
     setLoading(true);
@@ -83,14 +86,17 @@ const Products: React.FC = () => {
     try {
       if (editingId) {
         await updateProduct(editingId, payload);
+        show({ title: 'Produto atualizado!', variant: 'success' });
       } else {
         await createProduct(payload);
+        show({ title: 'Produto criado!', variant: 'success' });
       }
       setForm(emptyForm);
       setEditingId(null);
       await load();
     } catch (err) {
       setError('Falha ao salvar produto.');
+      show({ title: 'Erro ao salvar', description: 'Tente novamente', variant: 'error' });
       console.error(err);
     }
   }
@@ -111,9 +117,11 @@ const Products: React.FC = () => {
     if (!confirm('Remover este produto?')) return;
     try {
       await deleteProduct(id);
+      show({ title: 'Produto removido', variant: 'success' });
       await load();
     } catch (err) {
       setError('Falha ao remover produto.');
+      show({ title: 'Erro ao remover', description: 'Tente novamente', variant: 'error' });
       console.error(err);
     }
   }
@@ -224,7 +232,7 @@ const Products: React.FC = () => {
           <tbody>
             {loading ? (
               <tr>
-                <td className="p-3" colSpan={4}>Carregando…</td>
+                <td className="p-0" colSpan={4}><TableSkeleton rows={3} /></td>
               </tr>
             ) : items.length === 0 ? (
               <tr>

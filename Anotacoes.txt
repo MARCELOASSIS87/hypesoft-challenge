@@ -69,5 +69,28 @@ Escalabilidade
 → Mostro quando algo é suficiente pro desafio (mínimo exigido).
 → Também sinalizo quando pode virar melhoria futura (extras)
 
+const url = "http://localhost:5239/products";
 
+const init = {
+  method: "GET",
+  credentials: "include",
+  headers: {
+    "authorization": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJLUTVWTXdPM2szMy1lNU9zdHYwSWg1eFVpZFR4T2dZcjREUi1iMlFGNFhrIn0.eyJleHAiOjE3NTcwMTE2ODEsImlhdCI6MTc1NzAxMTM4MSwiYXV0aF90aW1lIjoxNzU2OTk1MDQ5LCJqdGkiOiJiZDBmZTE5ZC1jZDEyLTRjZGQtYmRkZC05OThlODczZTllYTMiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvcmVhbG1zL3Nob3BzZW5zZSIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiI3ZGRkNzZjZC0zZWJiLTRjM2EtODBkNi01ZDVlN2RiNTMyOTciLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJmcm9udGVuZCIsIm5vbmNlIjoiYWM4MTE3YTYtNDhkMS00ZWRjLTg4NGEtZDBiZmFkNTQ3MjI0Iiwic2Vzc2lvbl9zdGF0ZSI6ImJlZWJhMTMxLTNmNTgtNDBlNy04NDMxLWM0ZDRiOGQ4OTM0NSIsImFjciI6IjAiLCJhbGxvd2VkLW9yaWdpbnMiOlsiKiJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1zaG9wc2Vuc2UiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiTWFuYWdlciJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJzaWQiOiJiZWViYTEzMS0zZjU4LTQwZTctODQzMS1jNGQ0YjhkODkzNDUiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJtYW5hZ2VyIG1hbmFnZXIiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJtYW5hZ2VyIiwiZ2l2ZW5fbmFtZSI6Im1hbmFnZXIiLCJmYW1pbHlfbmFtZSI6Im1hbmFnZXIiLCJlbWFpbCI6Im1hbmFnZXJAbWFuYWdlci5jb20ifQ.niUmHXSDPCy85e-UHCndAvFDF_hlPYiydZKNH8RvyHk-gDe0cea8WGAl-QhQbgHjinmFk9CXHf6X-r7vKo2OyHJYZdCfeXdoTdx_2sqDo-vRT_PcQ2X-1UOFQVnEoymAaAgiP0fOYLvYdZenvjmJ-IkUrUzV98AyGdLEH3om3F4ApdVOGGRy0hsVxZ5EPs64jgM-dZc044gqIIz83ZN_-EEUR-2NOxb-7XoiIF8p7l--HYlYqIMjvfd5lU7zBe5La9S9SHK24klZTy-TEsm9HWSpYcoPZuhBCP5XrmDLhhRjOm73Y2f6TewhDl-ZLtDzaOBDZve-PRo3n_lwUag7xg",
+    "accept": "application/json, text/plain, */*"
+  }
+};
 
+async function burst(times = 200) {
+  const start = performance.now();
+  const tasks = Array.from({ length: times }, () => fetch(url, init));
+  const resps = await Promise.allSettled(tasks);
+  const summary = resps.reduce((acc, r) => {
+    const code = r.value ? r.value.status : "ERR";
+    acc[code] = (acc[code] || 0) + 1;
+    return acc;
+  }, {});
+  console.table(summary);
+  console.log("Tempo total (ms):", Math.round(performance.now() - start));
+}
+
+burst(200);
