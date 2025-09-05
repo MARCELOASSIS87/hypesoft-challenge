@@ -1,15 +1,16 @@
 using System.Security.Cryptography;
 using System.Text;
-using System.Linq; // ✅ adicionar
+using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
+using ShopSense.Api.Services;
 
 namespace ShopSense.Api.Middlewares;
 
-/// Cache básico em memória para requisições GET.
+/// Cache básico em memória para requisições GET, com versionamento por escopo.
 /// Env vars:
-///   CACHE_ENABLED=true|false   (default: true)
-///   CACHE_TTL_SECONDS=60       (default: 60)
-///   CACHE_PATHS=/products,/categories,/products/low-stock  (opcional; vazio => todas GET)
+///   CACHE_ENABLED=true|false
+///   CACHE_TTL_SECONDS=60
+///   CACHE_PATHS=/products,/categories,/products/low-stock (opcional; vazio => todas GET)
 public sealed class QueryCacheMiddleware : IMiddleware
 {
     private readonly IMemoryCache _cache;
@@ -17,11 +18,18 @@ public sealed class QueryCacheMiddleware : IMiddleware
     private readonly bool _enabled;
     private readonly TimeSpan _ttl;
     private readonly HashSet<string> _allowedPaths;
+    private readonly ICacheVersionProvider _versions;
 
-    public QueryCacheMiddleware(IMemoryCache cache, ILogger<QueryCacheMiddleware> logger, IConfiguration config)
+    public QueryCacheMiddleware(
+        IMemoryCache cache,
+        ILogger<QueryCacheMiddleware> logger,
+        IConfiguration config,
+        ICacheVersionProvider versions)
     {
         _cache = cache;
         _logger = logger;
+        _versions = versions;
+
         _enabled = ReadEnabled(config);
         _ttl = ReadTtl(config);
         _allowedPaths = ReadAllowedPaths(config);
@@ -41,7 +49,10 @@ public sealed class QueryCacheMiddleware : IMiddleware
             return;
         }
 
-        var cacheKey = BuildCacheKey(context.Request);
+        // Escopo: primeira parte do path (ex.: "/products", "/categories")
+        var scope = ExtractScope(context.Request.Path);
+        var cacheKey = BuildCacheKey(context.Request, _versions.GetVersion(scope));
+
         if (_cache.TryGetValue(cacheKey, out CachedResponse? cached) && cached is not null)
         {
             _logger.LogInformation("[Cache HIT] {Path}{Query}", context.Request.Path, context.Request.QueryString);
@@ -86,13 +97,21 @@ public sealed class QueryCacheMiddleware : IMiddleware
         }
     }
 
-    private static string BuildCacheKey(HttpRequest req)
+    private static string ExtractScope(PathString path)
+    {
+        var p = path.Value ?? "/";
+        if (p.Length == 0 || p == "/") return "/";
+        var firstSlash = p.IndexOf('/', 1);
+        return firstSlash > 0 ? p[..firstSlash] : p; // "/products/123" => "/products"
+    }
+
+    private static string BuildCacheKey(HttpRequest req, int version)
     {
         var qs = req.Query
             .OrderBy(kv => kv.Key, StringComparer.OrdinalIgnoreCase)
-            .Select(kv => $"{kv.Key}={string.Join(",", kv.Value.ToArray())}"); // ✅ separador string + ToArray()
-        var raw = $"{req.Method}:{req.Path}?{string.Join("&", qs)}"; // ✅ separador string
+            .Select(kv => $"{kv.Key}={string.Join(",", kv.Value.ToArray())}");
 
+        var raw = $"v{version}:{req.Method}:{req.Path}?{string.Join("&", qs)}";
         using var sha = SHA256.Create();
         var hash = Convert.ToHexString(sha.ComputeHash(Encoding.UTF8.GetBytes(raw)));
         return $"qcache:{hash}";

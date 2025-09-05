@@ -24,7 +24,7 @@ export default function Dashboard() {
     totalProducts,
     lowStock,
     chartData,
-    recentActivities,
+    filteredActivities,
     filteredLowStock,
   } = useMemo(() => {
     // totais
@@ -65,10 +65,15 @@ export default function Dashboard() {
         badge:
           (p.quantity ?? 0) < 10 ? "Low Stock" : (p.price ?? 0) > 0 ? "Product Update" : "New Product",
       }));
-
+    // normaliza a busca uma única vez
+    const q = query.trim().toLowerCase();
     // filtro de search para a coluna direita
     const filteredLowStock = lowStock.filter((p) =>
       p.name.toLowerCase().includes(query.toLowerCase())
+    );
+    // filtro de search para Recent Activities (nome OU categoria)
+    const filteredActivities = recentActivities.filter(
+      (a) => a.name.toLowerCase().includes(q) || a.category.toLowerCase().includes(q)
     );
 
     return {
@@ -77,6 +82,7 @@ export default function Dashboard() {
       chartData,
       recentActivities,
       filteredLowStock,
+      filteredActivities
     };
   }, [products, categories, query]);
 
@@ -162,11 +168,11 @@ export default function Dashboard() {
                   <div className="col-span-4">Details</div>
                   <div className="col-span-2 text-right">Action</div>
                 </div>
-                {recentActivities.map((a) => (
-                  <div
-                    key={a.id}
-                    className="grid grid-cols-12 items-center px-4 py-3 text-sm"
-                  >
+                {filteredActivities.length === 0 && (
+                  <div className="px-4 py-6 text-sm text-gray-500">Nenhuma atividade encontrada.</div>
+                )}
+                {filteredActivities.map((a) => (
+                  <div key={a.id} className="grid grid-cols-12 items-center px-4 py-3 text-sm">
                     <div className="col-span-4 flex items-center gap-3">
                       <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-zinc-800" />
                       <div className="min-w-0">
@@ -177,10 +183,10 @@ export default function Dashboard() {
                     <div className="col-span-2">
                       <span
                         className={`rounded-full px-2 py-1 text-xs ${a.badge === "Low Stock"
-                            ? "bg-rose-100 text-rose-700"
-                            : a.badge === "Product Update"
-                              ? "bg-blue-100 text-blue-700"
-                              : "bg-emerald-100 text-emerald-700"
+                          ? "bg-rose-100 text-rose-700"
+                          : a.badge === "Product Update"
+                            ? "bg-blue-100 text-blue-700"
+                            : "bg-emerald-100 text-emerald-700"
                           }`}
                       >
                         {a.badge}
@@ -249,7 +255,7 @@ export default function Dashboard() {
             </div>
           </div>
         </section>
-      </div>
-    </AppLayout>
+      </div >
+    </AppLayout >
   );
 }

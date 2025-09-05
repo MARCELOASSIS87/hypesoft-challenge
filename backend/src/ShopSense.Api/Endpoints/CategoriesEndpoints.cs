@@ -32,42 +32,48 @@ public static class CategoriesEndpoints
         .Produces(StatusCodes.Status404NotFound);
 
         // POST /categories
-        group.MapPost("/", async (Category input, ICategoryRepository repo) =>
+        group.MapPost("/", async (Category input, ICategoryRepository repo, ShopSense.Api.Services.ICacheVersionProvider versions) =>
         {
             if (string.IsNullOrWhiteSpace(input.Name) || string.IsNullOrWhiteSpace(input.Slug))
                 return Results.BadRequest("Name and Slug are required");
-
+        
             var created = await repo.AddAsync(input);
+            versions.Bump("/categories");
             return Results.Created($"/categories/{created.Id}", created);
         })
+
         .WithName("CreateCategory")
         .Produces<Category>(StatusCodes.Status201Created)
         .Produces(StatusCodes.Status400BadRequest);
 
         // PUT /categories/{id}
-        group.MapPut("/{id}", async (string id, Category input, ICategoryRepository repo) =>
+        group.MapPut("/{id}", async (string id, Category input, ICategoryRepository repo, ShopSense.Api.Services.ICacheVersionProvider versions) =>
         {
             input.Id = id;
             try
             {
                 await repo.UpdateAsync(input);
+                versions.Bump("/categories");
                 return Results.NoContent();
             }
             catch (KeyNotFoundException)
-            {
+                    {
                 return Results.NotFound();
             }
         })
+
         .WithName("UpdateCategory")
         .Produces(StatusCodes.Status204NoContent)
         .Produces(StatusCodes.Status404NotFound);
 
         // DELETE /categories/{id}
-        group.MapDelete("/{id}", async (string id, ICategoryRepository repo) =>
+        group.MapDelete("/{id}", async (string id, ICategoryRepository repo, ShopSense.Api.Services.ICacheVersionProvider versions) =>
         {
             await repo.DeleteAsync(id);
+            versions.Bump("/categories");
             return Results.NoContent();
         })
+
         .WithName("DeleteCategory")
         .Produces(StatusCodes.Status204NoContent);
     }

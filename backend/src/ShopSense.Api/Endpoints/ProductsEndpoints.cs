@@ -38,25 +38,28 @@ public static class ProductsEndpoints
         .Produces(StatusCodes.Status404NotFound);
 
         // POST /products
-        group.MapPost("/", async (Product input, IProductRepository repo) =>
+        group.MapPost("/", async (Product input, IProductRepository repo, ShopSense.Api.Services.ICacheVersionProvider versions) =>
         {
             if (string.IsNullOrWhiteSpace(input.Name) || string.IsNullOrWhiteSpace(input.Slug) || string.IsNullOrWhiteSpace(input.CategoryId))
                 return Results.BadRequest("Name, Slug e CategoryId são obrigatórios");
-
+        
             var created = await repo.AddAsync(input);
+            versions.Bump("/products"); // invalida cache do escopo
             return Results.Created($"/products/{created.Id}", created);
         })
+
         .WithName("CreateProduct")
         .Produces<Product>(StatusCodes.Status201Created)
         .Produces(StatusCodes.Status400BadRequest);
 
         // PUT /products/{id}
-        group.MapPut("/{id}", async (string id, Product input, IProductRepository repo) =>
+        group.MapPut("/{id}", async (string id, Product input, IProductRepository repo, ShopSense.Api.Services.ICacheVersionProvider versions) =>
         {
             input.Id = id;
             try
             {
                 await repo.UpdateAsync(input);
+                versions.Bump("/products"); // invalida cache do escopo
                 return Results.NoContent();
             }
             catch (KeyNotFoundException)
@@ -68,17 +71,20 @@ public static class ProductsEndpoints
                 return Results.BadRequest(ex.Message);
             }
         })
+
         .WithName("UpdateProduct")
         .Produces(StatusCodes.Status204NoContent)
         .Produces(StatusCodes.Status404NotFound)
         .Produces(StatusCodes.Status400BadRequest);
 
         // DELETE /products/{id}
-        group.MapDelete("/{id}", async (string id, IProductRepository repo) =>
+        group.MapDelete("/{id}", async (string id, IProductRepository repo, ShopSense.Api.Services.ICacheVersionProvider versions) =>
         {
             await repo.DeleteAsync(id);
+            versions.Bump("/products"); // invalida cache do escopo
             return Results.NoContent();
         })
+        
         .WithName("DeleteProduct")
         .Produces(StatusCodes.Status204NoContent);
     }
