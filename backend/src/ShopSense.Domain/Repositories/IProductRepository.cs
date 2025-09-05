@@ -14,4 +14,5 @@ public interface IProductRepository
     Task<Product> AddAsync(Product product);
     Task UpdateAsync(Product product);
     Task DeleteAsync(string id);
+    Task<long> CountByCategoryAsync(string categoryId);
 }

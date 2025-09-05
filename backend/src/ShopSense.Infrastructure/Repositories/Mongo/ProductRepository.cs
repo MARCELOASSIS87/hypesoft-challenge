@@ -130,6 +130,16 @@ public sealed class ProductRepository : IProductRepository
         await _collection.DeleteOneAsync(x => x.Id == oid);
     }
 
+    // NEW: contagem de produtos por categoria (para bloquear exclusão de categoria em uso)
+    public async Task<long> CountByCategoryAsync(string categoryId)
+    {
+        if (!ObjectId.TryParse(categoryId, out var catOid))
+            return 0;
+
+        var filter = Builders<ProductDocument>.Filter.Eq(x => x.CategoryId, catOid);
+        return await _collection.CountDocumentsAsync(filter);
+    }
+
     /// <summary>
     /// Documento de persistência (formato salvo no MongoDB).
     /// Mantido separado do domínio para controle explícito do mapeamento.

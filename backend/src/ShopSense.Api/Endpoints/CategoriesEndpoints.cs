@@ -36,7 +36,7 @@ public static class CategoriesEndpoints
         {
             if (string.IsNullOrWhiteSpace(input.Name) || string.IsNullOrWhiteSpace(input.Slug))
                 return Results.BadRequest("Name and Slug are required");
-        
+
             var created = await repo.AddAsync(input);
             versions.Bump("/categories");
             return Results.Created($"/categories/{created.Id}", created);
@@ -57,7 +57,7 @@ public static class CategoriesEndpoints
                 return Results.NoContent();
             }
             catch (KeyNotFoundException)
-                    {
+            {
                 return Results.NotFound();
             }
         })
@@ -67,14 +67,31 @@ public static class CategoriesEndpoints
         .Produces(StatusCodes.Status404NotFound);
 
         // DELETE /categories/{id}
-        group.MapDelete("/{id}", async (string id, ICategoryRepository repo, ShopSense.Api.Services.ICacheVersionProvider versions) =>
+        // DELETE /categories/{id}
+        group.MapDelete("/{id}", async (
+            string id,
+            ICategoryRepository repo,
+            IProductRepository products,                    // NEW: repo de produtos
+            ShopSense.Api.Services.ICacheVersionProvider versions) =>
         {
+            // NEW: bloqueia exclusão quando existirem produtos na categoria
+            var count = await products.CountByCategoryAsync(id);
+            if (count > 0)
+            {
+                return Results.Problem(
+                    title: "Category in use",
+                    detail: $"Cannot delete category '{id}' because there are {count} product(s) linked to it.",
+                    statusCode: StatusCodes.Status409Conflict
+                );
+            }
+
             await repo.DeleteAsync(id);
             versions.Bump("/categories");
             return Results.NoContent();
         })
-
         .WithName("DeleteCategory")
-        .Produces(StatusCodes.Status204NoContent);
+        .Produces(StatusCodes.Status204NoContent)
+        .Produces(StatusCodes.Status409Conflict);          // NEW: documenta o 409
+
     }
 }
