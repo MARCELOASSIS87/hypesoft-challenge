@@ -193,9 +193,7 @@ export default function Dashboard() {
                       </span>
                     </div>
                     <div className="col-span-4 text-gray-600 dark:text-gray-300">
-                      {a.badge === "Low Stock"
-                        ? `Stock: ${a.quantity} units`
-                        : `Price: ${currencyBRL(a.price ?? 0)} | Stock: ${a.quantity}`}
+                      {`Price: ${currencyBRL(a.price ?? 0)} | Stock: ${a.quantity}`}
                     </div>
                     <div className="col-span-2 text-right">
                       <Button size="sm" variant="outline">
