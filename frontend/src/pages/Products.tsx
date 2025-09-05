@@ -42,7 +42,7 @@ const Products: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const [products, categories] = await Promise.all([getProducts(), getCategories()]);
+      const [products, categories] = await Promise.all([getProducts({ fresh: true }), getCategories()]);
       setItems(products as UIProduct[]);
       setCats(categories);
     } catch (e) {

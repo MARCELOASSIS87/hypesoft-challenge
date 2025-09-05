@@ -26,10 +26,14 @@ function normalize(p: Product) {
   };
 }
 
-export async function getProducts() {
-  const res = await api.get<Product[]>('/products');
+export async function getProducts(opts?: { fresh?: boolean }) {
+  const url = opts?.fresh ? `/products?_=${Date.now()}` : '/products';
+  const res = await api.get<Product[]>(url, {
+    headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache' },
+  });
   return (res.data ?? []).map(normalize);
 }
+
 
 export async function createProduct(p: {
   name: string;
