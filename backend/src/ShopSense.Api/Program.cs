@@ -87,6 +87,7 @@ builder.Services.AddRateLimiter(options =>
 
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 });
+builder.Services.AddQueryMemoryCache();
 
 var app = builder.Build();
 
@@ -122,6 +123,8 @@ app.Use(async (ctx, next) =>
 app.UseCors("DefaultCors");
 // Rate Limiter (antes do mapeamento dos endpoints)
 app.UseRateLimiter();
+// 🔹 Cache básico de queries (GET)
+app.UseMiddleware<ShopSense.Api.Middlewares.QueryCacheMiddleware>();
 // Endpoints de Categorias
 app.MapCategories();
 // Endpoints de products
