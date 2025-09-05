@@ -95,7 +95,6 @@ export default function Dashboard() {
       <div className="p-6 space-y-6">
         {/* Header + Tabs (estético, seguindo o protótipo do README) */}
         <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-semibold">Overview</h1>
           <div className="flex flex-wrap items-center gap-2 text-sm">
             <button className="rounded-full bg-violet-600/10 px-3 py-1 font-medium text-violet-700 dark:text-violet-300">
               Overview
@@ -123,7 +122,7 @@ export default function Dashboard() {
           <StatCard title="Total Products" value={totalProducts} helper="+variação mensal (mock)" />
           <StatCard title="Average Rating" value="4.8" helper="+0.2 (mock)" />
           <StatCard title="Sales Trends" value="↑" helper="último mês (mock)" />
-          <StatCard title="Low Stock" value={lowStock.length} helper="produtos < 10 un." />
+          <StatCard title="Low Stock" value={lowStock.length} helper="products < 10 units" />
         </section>
 
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -131,7 +130,7 @@ export default function Dashboard() {
           <div className="lg:col-span-2 space-y-6">
             <div>
               <h2 className="mb-2 text-sm font-medium text-gray-600">
-                Produtos por categoria
+                Products by category
               </h2>
               <ProductsByCategoryChart data={chartData} />
             </div>
@@ -229,7 +228,7 @@ export default function Dashboard() {
               <ul className="divide-y divide-gray-200/60 dark:divide-zinc-800">
                 {filteredLowStock.length === 0 && (
                   <li className="p-3 text-sm text-gray-500">
-                    Nenhum item com baixo estoque.
+                    No low stock items.
                   </li>
                 )}
                 {filteredLowStock.slice(0, 8).map((p) => (
