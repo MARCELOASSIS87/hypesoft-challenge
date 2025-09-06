@@ -16,7 +16,7 @@ public class ApiFactory : WebApplicationFactory<Program>
             var mem = new Dictionary<string, string?>
             {
                 // CORS liberado p/ o front local
-                ["Security:AllowedOrigins:0"] = "http://localhost:5173",
+                ["Security:AllowedOrigins:0"] = "http://localhost:3000",
 
                 // *** Rate limit BEM BAIXO para garantir 429 no teste ***
                 ["Security:RateLimiting:FixedWindow:PermitLimit"] = "1",

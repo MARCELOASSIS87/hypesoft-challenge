@@ -3,14 +3,14 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 // Ajuste aqui o alvo do backend durante o desenvolvimento
-const API_TARGET = 'http://localhost:5239';
+const API_TARGET = 'http://localhost:5000';
 
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 5173,
+    port: 3000,
     proxy: {
-      // Ex.: /api/products  ->  http://localhost:5239/products
+      // Ex.: /api/products  ->  http://localhost:5000/products
       '/api': {
         target: API_TARGET,
         changeOrigin: true,

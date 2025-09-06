@@ -32,10 +32,9 @@ export function initKeycloak(): Promise<boolean> {
 
     initPromise = keycloak
         .init({
-            onLoad: 'check-sso',
+            onLoad: 'login-required',
             pkceMethod: 'S256',
-            silentCheckSsoRedirectUri: `${window.location.origin}/silent-check-sso.html`,
-            checkLoginIframe: true,
+            checkLoginIframe: false,
         })
         .then((authenticated) => {
             hasInit = true;

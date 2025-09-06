@@ -38,7 +38,7 @@ Precisamos de SSO, PKCE, verificação de sessão e forma simples de aplicar *gu
 - Client: `frontend` (public)  
   - Standard Flow: ON  
   - PKCE: S256  
-  - Redirect URIs: `http://localhost:5173/*`  
+  - Redirect URIs: `http://localhost:3000/*`  
   - Web Origins: `*`  
 - Usuário de teste: criar, setar senha e atribuir role (ex.: `Admin`).  
 
