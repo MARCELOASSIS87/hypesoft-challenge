@@ -9,7 +9,6 @@ import WithRoles from '@/routes/WithRoles';
 import QueryProvider from '@/context/QueryProvider'; // ← adicionado
 import ToastProvider from '@/context/ToastProvider';
 
-import Login from '@/pages/Login';
 import Dashboard from '@/pages/Dashboard';
 import Products from '@/pages/Products';
 import Categories from '@/pages/Categories';
@@ -20,7 +19,6 @@ function Private({ children }: { children: React.ReactNode }) {
 
 const router = createBrowserRouter([
   { path: '/', element: <Navigate to="/dashboard" replace /> },
-  { path: '/login', element: <Login /> },
 
   // Área autenticada
   { path: '/dashboard', element: <Private><Dashboard /></Private> },
