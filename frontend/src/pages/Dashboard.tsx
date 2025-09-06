@@ -119,7 +119,7 @@ export default function Dashboard() {
 
         {/* Cards no topo */}
         <section className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <StatCard title="Total Products" value={totalProducts} helper="+variação mensal (mock)" />
+          <StatCard title="Total Products" value={totalProducts} helper="+variação mensal" />
           <StatCard title="Average Rating" value="4.8" helper="+0.2 (mock)" />
           <StatCard title="Sales Trends" value="↑" helper="último mês (mock)" />
           <StatCard title="Low Stock" value={lowStock.length} helper="products < 10 units" />

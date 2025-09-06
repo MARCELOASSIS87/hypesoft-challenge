@@ -50,6 +50,15 @@ public static class CategoriesEndpoints
         group.MapPut("/{id}", async (string id, Category input, ICategoryRepository repo, ShopSense.Api.Services.ICacheVersionProvider versions) =>
         {
             input.Id = id;
+            // NEW: se veio Name, (re)gera o Slug automaticamente
+            if (!string.IsNullOrWhiteSpace(input.Name))
+            {
+                input.Slug = input.Name
+                    .ToLowerInvariant()
+                    .Replace(" ", "-")
+                    .Replace(".", "")
+                    .Replace(",", "");
+            }
             try
             {
                 await repo.UpdateAsync(input);

@@ -124,6 +124,7 @@ const Categories: React.FC = () => {
               <Input
                 id="slug"
                 value={slug}
+                readOnly
                 onChange={(e) => setSlug(e.target.value)}
                 placeholder="ex.: camisas"
               />

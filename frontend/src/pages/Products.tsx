@@ -155,6 +155,7 @@ const Products: React.FC = () => {
               <Input
                 id="slug"
                 value={form.slug}
+                readOnly
                 onChange={(e) => onChange('slug', e.target.value)}
                 placeholder="ex.: camiseta-preta"
               />

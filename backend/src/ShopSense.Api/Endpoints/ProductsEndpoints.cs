@@ -10,7 +10,7 @@ public static class ProductsEndpoints
 {
     public static void MapProducts(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/products").WithTags("Products").RequireRateLimiting("fixed");;
+        var group = app.MapGroup("/products").WithTags("Products").RequireRateLimiting("fixed"); ;
 
         // GET /products?categoryId=&page=&pageSize=
         group.MapGet("/", async (IProductRepository repo, string? categoryId, int page = 1, int pageSize = 20) =>
@@ -42,7 +42,7 @@ public static class ProductsEndpoints
         {
             if (string.IsNullOrWhiteSpace(input.Name) || string.IsNullOrWhiteSpace(input.Slug) || string.IsNullOrWhiteSpace(input.CategoryId))
                 return Results.BadRequest("Name, Slug e CategoryId são obrigatórios");
-        
+
             var created = await repo.AddAsync(input);
             versions.Bump("/products"); // invalida cache do escopo
             versions.Bump("/products/low-stock");
@@ -57,6 +57,14 @@ public static class ProductsEndpoints
         group.MapPut("/{id}", async (string id, Product input, IProductRepository repo, ShopSense.Api.Services.ICacheVersionProvider versions) =>
         {
             input.Id = id;
+            if (!string.IsNullOrWhiteSpace(input.Name))
+            {
+                input.Slug = input.Name
+                    .ToLowerInvariant()
+                    .Replace(" ", "-")
+                    .Replace(".", "")
+                    .Replace(",", "");
+            }
             try
             {
                 await repo.UpdateAsync(input);
@@ -87,7 +95,7 @@ public static class ProductsEndpoints
             versions.Bump("/products/low-stock");
             return Results.NoContent();
         })
-        
+
         .WithName("DeleteProduct")
         .Produces(StatusCodes.Status204NoContent);
     }

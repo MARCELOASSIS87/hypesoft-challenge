@@ -20,3 +20,12 @@ docker compose ps
 /frontend$ npm install
 /frontend$ npm run dev
 # URL: http://localhost:3000
+
+## Demonstração em vídeo
+[Assista à demonstração](docs/demo.mp4)
+
+## Cobertura de Testes
+
+Os testes cobrem desde configurações de infraestrutura (CORS, rate limiting, headers de segurança) até as regras de negócio críticas do estoque.
+
+Veja a descrição detalhada dos cenários em [docs/tests-coverage.md](docs/tests-coverage.md).
