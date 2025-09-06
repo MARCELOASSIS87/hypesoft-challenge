@@ -9,8 +9,8 @@ docker compose ps
 /backend/src/ShopSense.Api$ dotnet restore
 /backend/src/ShopSense.Api$ dotnet run
 # URLs:
-# - API: http://localhost:5239
-# - Swagger: http://localhost:5239/swagger
+# - API: http://localhost:5000
+# - Swagger: http://localhost:5000/swagger
 
 # --- Rodar Testes do Backend ---
 /backend/tests/ShopSense.Tests$ dotnet test
@@ -19,4 +19,4 @@ docker compose ps
 # --- Rodar Frontend (React 18 + Vite + Tailwind + Shadcn) ---
 /frontend$ npm install
 /frontend$ npm run dev
-# URL: http://localhost:5173
+# URL: http://localhost:3000

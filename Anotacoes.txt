@@ -1,9 +1,0 @@
-Onde o teste roda
-marcelo@Marcelo-inspiron1:~/projetos/desafio-1/backend/tests/ShopSense.Tests$ dotnet test onde roda o teste.
-o que ele cobre
-Front onde roda
-marcelo@Marcelo-inspiron1:~/projetos/desafio-1/frontend$ npm run dev
-Backend onde roda
-marcelo@Marcelo-inspiron1:~/projetos/desafio-1/backend/src/ShopSense.Api$ dotnet run
-Docker onde sobe
-marcelo@Marcelo-inspiron1:~/projetos/desafio-1/infra$
