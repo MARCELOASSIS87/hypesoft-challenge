@@ -45,6 +45,7 @@ public static class ProductsEndpoints
         
             var created = await repo.AddAsync(input);
             versions.Bump("/products"); // invalida cache do escopo
+            versions.Bump("/products/low-stock");
             return Results.Created($"/products/{created.Id}", created);
         })
 
@@ -60,6 +61,7 @@ public static class ProductsEndpoints
             {
                 await repo.UpdateAsync(input);
                 versions.Bump("/products"); // invalida cache do escopo
+                versions.Bump("/products/low-stock");
                 return Results.NoContent();
             }
             catch (KeyNotFoundException)
@@ -82,6 +84,7 @@ public static class ProductsEndpoints
         {
             await repo.DeleteAsync(id);
             versions.Bump("/products"); // invalida cache do escopo
+            versions.Bump("/products/low-stock");
             return Results.NoContent();
         })
         
